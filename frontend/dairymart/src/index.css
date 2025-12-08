@@ -1,1 +1,20 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+
+/* THIS LINE IS SUFFICIENT FOR TAILWIND CSS V4 - IT IMPORTS ALL LAYERS */
+@import "tailwindcss"; 
+
+
+@layer base {
+body {
+    font-family: 'Poppins', sans-serif;
+    /* Your requested background gray: #E6E7E8 */
+    background-color: #E6E7E8; 
+    color: #333333;
+}
+}
+
+/* Custom Utilities for theme consistency */
+.text-dairy-primary { color: #29ABE2; }
+.bg-dairy-primary { background-color: #29ABE2; }
+.border-dairy-primary { border-color: #29ABE2; }
+.ring-dairy-primary { --tw-ring-color: #29ABE2; }
