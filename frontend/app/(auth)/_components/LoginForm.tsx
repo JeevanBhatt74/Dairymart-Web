@@ -1,75 +1,76 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { startTransition, useTransition } from "react";
+import { useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { LoginData, loginSchema } from "../schema";
+
 export default function LoginForm() {
     const router = useRouter();
-    const {
-        register,
-        handleSubmit,
-        formState: { errors, isSubmitting },
-    } = useForm<LoginData>({
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginData>({
         resolver: zodResolver(loginSchema),
-        mode: "onSubmit",
     });
-    const [pending, setTransition] = useTransition()
+    const [pending, setTransition] = useTransition();
 
     const submit = async (values: LoginData) => {
-        // GOTO
-        setTransition( async () => {
-            await new Promise((resolve) => setTimeout(resolve, 1000));
-            // router.push("/");
-        })
-        console.log("login", values);
+        setTransition(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 1500));
+            router.push("/dashboard");
+        });
     };
 
     return (
-        <form onSubmit={handleSubmit(submit)} className="space-y-4">
-            <div className="space-y-1">
-                <label className="text-sm font-medium" htmlFor="email">Email</label>
-                <input
-                    id="email"
-                    type="email"
-                    autoComplete="email"
-                    className="h-10 w-full rounded-md border border-black/10 dark:border-white/15 bg-background px-3 text-sm outline-none focus:border-foreground/40"
-                    {...register("email")}
-                    placeholder="you@example.com"
-                />
-                {errors.email?.message && (
-                    <p className="text-xs text-red-600">{errors.email.message}</p>
-                )}
+        <form onSubmit={handleSubmit(submit)} className="space-y-6">
+            <div className="space-y-2">
+                <label className="text-sm font-semibold text-[var(--dm-text-secondary)] ml-1" htmlFor="email">Email</label>
+                <div className="relative">
+                    <input
+                        id="email"
+                        type="email"
+                        className="w-full h-12 pl-11 pr-4 bg-[var(--dm-bg-light)] border border-[var(--dm-border)] rounded-[15px] outline-none focus:border-[var(--dm-primary-blue)] focus:ring-4 focus:ring-blue-500/10 transition-all text-[var(--dm-text-main)]"
+                        {...register("email")}
+                        placeholder="hello@dairymart.com"
+                    />
+                    <div className="absolute left-4 top-3.5 text-[var(--dm-text-secondary)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    </div>
+                </div>
+                {errors.email?.message && <p className="text-xs text-[var(--dm-error)] ml-1">{errors.email.message}</p>}
             </div>
 
-            <div className="space-y-1">
-                <label className="text-sm font-medium" htmlFor="password">Password</label>
-                <input
-                    id="password"
-                    type="password"
-                    autoComplete="current-password"
-                    className="h-10 w-full rounded-md border border-black/10 dark:border-white/15 bg-background px-3 text-sm outline-none focus:border-foreground/40"
-                    {...register("password")}
-                    placeholder="••••••"
-                />
-                {errors.password?.message && (
-                    <p className="text-xs text-red-600">{errors.password.message}</p>
-                )}
+            <div className="space-y-2">
+                <div className="flex justify-between items-center ml-1">
+                    <label className="text-sm font-semibold text-[var(--dm-text-secondary)]" htmlFor="password">Password</label>
+                    <Link href="#" className="text-xs font-bold text-[var(--dm-primary-blue)] hover:underline">Forgot Password?</Link>
+                </div>
+                <div className="relative">
+                    <input
+                        id="password"
+                        type="password"
+                        className="w-full h-12 pl-11 pr-4 bg-[var(--dm-bg-light)] border border-[var(--dm-border)] rounded-[15px] outline-none focus:border-[var(--dm-primary-blue)] focus:ring-4 focus:ring-blue-500/10 transition-all text-[var(--dm-text-main)]"
+                        {...register("password")}
+                        placeholder="••••••••"
+                    />
+                    <div className="absolute left-4 top-3.5 text-[var(--dm-text-secondary)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </div>
+                </div>
+                {errors.password?.message && <p className="text-xs text-[var(--dm-error)] ml-1">{errors.password.message}</p>}
             </div>
 
-            <button
-                type="submit"
-                disabled={isSubmitting || pending}
-                className="h-10 w-full rounded-md bg-foreground text-background text-sm font-semibold hover:opacity-90 disabled:opacity-60"
+            <button 
+                type="submit" 
+                disabled={isSubmitting || pending} 
+                className="w-full h-12 rounded-[15px] text-white font-bold text-sm shadow-lg shadow-blue-500/20 hover:opacity-90 transition-all disabled:opacity-70"
+                style={{ backgroundColor: "var(--dm-primary-blue)" }}
             >
-                { isSubmitting || pending ? "Logging in..." : "Log in"}
+                {isSubmitting || pending ? "Signing In..." : "Sign In"}
             </button>
 
-            <div className="mt-1 text-center text-sm">
-                Don't have an account? <Link href="/register" className="font-semibold hover:underline">Sign up</Link>
+            <div className="text-center text-sm text-[var(--dm-text-secondary)]">
+                Donot have an account? <Link href="/register" className="font-bold text-[var(--dm-primary-blue)] hover:underline">Create Account</Link>
             </div>
         </form>
     );

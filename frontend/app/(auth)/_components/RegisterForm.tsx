@@ -1,7 +1,6 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
 import { RegisterData, registerSchema } from "../schema";
@@ -10,98 +9,87 @@ import { useRouter } from "next/navigation";
 
 export default function RegisterForm() {
     const router = useRouter();
-    const {
-        register,
-        handleSubmit,
-        formState: { errors, isSubmitting },
-    } = useForm<RegisterData>({
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<RegisterData>({
         resolver: zodResolver(registerSchema),
-        mode: "onSubmit",
     });
-
-    const [pending, setTransition] = useTransition()
+    const [pending, setTransition] = useTransition();
 
     const submit = async (values: RegisterData) => {
-        setTransition( async () => {
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+        setTransition(async () => {
+            await new Promise((resolve) => setTimeout(resolve, 1500));
             router.push("/login");
-        })
-        // GO TO LOGIN PAGE
-        console.log("register", values);
+        });
     };
 
     return (
-        <form onSubmit={handleSubmit(submit)} className="space-y-4">
-            <div className="space-y-1">
-                <label className="text-sm font-medium" htmlFor="name">Full name</label>
-                <input
-                    id="name"
-                    type="text"
-                    autoComplete="name"
-                    className="h-10 w-full rounded-md border border-black/10 dark:border-white/15 bg-background px-3 text-sm outline-none focus:border-foreground/40"
-                    {...register("name")}
-                    placeholder="Jane Doe"
-                />
-                {errors.name?.message && (
-                    <p className="text-xs text-red-600">{errors.name.message}</p>
-                )}
+        <form onSubmit={handleSubmit(submit)} className="space-y-5">
+            <div className="space-y-2">
+                <label className="text-sm font-semibold text-[var(--dm-text-secondary)] ml-1">Full Name</label>
+                <div className="relative">
+                    <input
+                        type="text"
+                        className="w-full h-12 pl-11 pr-4 bg-[var(--dm-bg-light)] border border-[var(--dm-border)] rounded-[15px] outline-none focus:border-[var(--dm-primary-blue)] focus:ring-4 focus:ring-blue-500/10 transition-all text-[var(--dm-text-main)]"
+                        {...register("name")}
+                        placeholder="John Doe"
+                    />
+                    <div className="absolute left-4 top-3.5 text-[var(--dm-text-secondary)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </div>
+                </div>
+                {errors.name?.message && <p className="text-xs text-[var(--dm-error)] ml-1">{errors.name.message}</p>}
             </div>
 
-            <div className="space-y-1">
-                <label className="text-sm font-medium" htmlFor="email">Email</label>
-                <input
-                    id="email"
-                    type="email"
-                    autoComplete="email"
-                    className="h-10 w-full rounded-md border border-black/10 dark:border-white/15 bg-background px-3 text-sm outline-none focus:border-foreground/40"
-                    {...register("email")}
-                    placeholder="you@example.com"
-                />
-                {errors.email?.message && (
-                    <p className="text-xs text-red-600">{errors.email.message}</p>
-                )}
+            <div className="space-y-2">
+                <label className="text-sm font-semibold text-[var(--dm-text-secondary)] ml-1">Email</label>
+                <div className="relative">
+                    <input
+                        type="email"
+                        className="w-full h-12 pl-11 pr-4 bg-[var(--dm-bg-light)] border border-[var(--dm-border)] rounded-[15px] outline-none focus:border-[var(--dm-primary-blue)] focus:ring-4 focus:ring-blue-500/10 transition-all text-[var(--dm-text-main)]"
+                        {...register("email")}
+                        placeholder="you@example.com"
+                    />
+                    <div className="absolute left-4 top-3.5 text-[var(--dm-text-secondary)]">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                    </div>
+                </div>
+                {errors.email?.message && <p className="text-xs text-[var(--dm-error)] ml-1">{errors.email.message}</p>}
             </div>
 
-            <div className="space-y-1">
-                <label className="text-sm font-medium" htmlFor="password">Password</label>
-                <input
-                    id="password"
-                    type="password"
-                    autoComplete="new-password"
-                    className="h-10 w-full rounded-md border border-black/10 dark:border-white/15 bg-background px-3 text-sm outline-none focus:border-foreground/40"
-                    {...register("password")}
-                    placeholder="••••••"
-                />
-                {errors.password?.message && (
-                    <p className="text-xs text-red-600">{errors.password.message}</p>
-                )}
+            <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <label className="text-sm font-semibold text-[var(--dm-text-secondary)] ml-1">Password</label>
+                    <input
+                        type="password"
+                        className="w-full h-12 px-4 bg-[var(--dm-bg-light)] border border-[var(--dm-border)] rounded-[15px] outline-none focus:border-[var(--dm-primary-blue)] focus:ring-4 focus:ring-blue-500/10 transition-all text-[var(--dm-text-main)]"
+                        {...register("password")}
+                        placeholder="••••••"
+                    />
+                    {errors.password?.message && <p className="text-xs text-[var(--dm-error)] ml-1">{errors.password.message}</p>}
+                </div>
+
+                <div className="space-y-2">
+                    <label className="text-sm font-semibold text-[var(--dm-text-secondary)] ml-1">Confirm</label>
+                    <input
+                        type="password"
+                        className="w-full h-12 px-4 bg-[var(--dm-bg-light)] border border-[var(--dm-border)] rounded-[15px] outline-none focus:border-[var(--dm-primary-blue)] focus:ring-4 focus:ring-blue-500/10 transition-all text-[var(--dm-text-main)]"
+                        {...register("confirmPassword")}
+                        placeholder="••••••"
+                    />
+                    {errors.confirmPassword?.message && <p className="text-xs text-[var(--dm-error)] ml-1">{errors.confirmPassword.message}</p>}
+                </div>
             </div>
 
-            <div className="space-y-1">
-                <label className="text-sm font-medium" htmlFor="confirmPassword">Confirm password</label>
-                <input
-                    id="confirmPassword"
-                    type="password"
-                    autoComplete="new-password"
-                    className="h-10 w-full rounded-md border border-black/10 dark:border-white/15 bg-background px-3 text-sm outline-none focus:border-foreground/40"
-                    {...register("confirmPassword")}
-                    placeholder="••••••"
-                />
-                {errors.confirmPassword?.message && (
-                    <p className="text-xs text-red-600">{errors.confirmPassword.message}</p>
-                )}
-            </div>
-
-            <button
-                type="submit"
-                disabled={isSubmitting || pending}
-                className="h-10 w-full rounded-md bg-foreground text-background text-sm font-semibold hover:opacity-90 disabled:opacity-60"
+            <button 
+                type="submit" 
+                disabled={isSubmitting || pending} 
+                className="w-full h-12 rounded-[15px] text-white font-bold text-sm shadow-lg shadow-blue-500/20 hover:opacity-90 transition-all disabled:opacity-70 mt-2"
+                style={{ backgroundColor: "var(--dm-primary-blue)" }}
             >
-                { isSubmitting || pending ? "Creating account..." : "Create account"}
+                {isSubmitting || pending ? "Creating Account..." : "Sign Up"}
             </button>
 
-            <div className="mt-1 text-center text-sm">
-                Already have an account? <Link href="/login" className="font-semibold hover:underline">Log in</Link>
+            <div className="text-center text-sm text-[var(--dm-text-secondary)]">
+                Already have an account? <Link href="/login" className="font-bold text-[var(--dm-primary-blue)] hover:underline">Log in</Link>
             </div>
         </form>
     );
