@@ -1,0 +1,24 @@
+import z from "zod";
+
+// Register DTO
+export const CreateUserDTO = z.object({
+    firstName: z.string().optional(),
+    lastName: z.string().optional(),
+    email: z.string().email(),
+    username: z.string().min(3),
+    password: z.string().min(6),
+    confirmPassword: z.string().min(6)
+}).refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match",
+    path: ["confirmPassword"]
+});
+
+export type CreateUserDTO = z.infer<typeof CreateUserDTO>;
+
+// Login DTO
+export const LoginUserDTO = z.object({
+    email: z.string().email(),
+    password: z.string().min(6)
+});
+
+export type LoginUserDTO = z.infer<typeof LoginUserDTO>;
