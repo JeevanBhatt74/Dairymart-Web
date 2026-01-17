@@ -1,16 +1,24 @@
-import { UserModel, IUser } from "../models/user.model";
+import { User } from "../models/user.model"; // Changed from UserModel to User
+import { IUser } from "../types/user.type"; // Import from types file, not model file
 
 export class UserRepository {
-    async createUser(userData: Partial<IUser>): Promise<IUser> {
-        const user = new UserModel(userData);
-        return await user.save();
+    // 1. Create User
+    async createUser(data: Partial<IUser>) {
+        return await User.create(data);
     }
 
-    async getUserByEmail(email: string): Promise<IUser | null> {
-        return await UserModel.findOne({ email });
+    // 2. Get User by Email
+    async getUserByEmail(email: string) {
+        return await User.findOne({ email }).select("+password"); // select password for login check
     }
 
-    async getUserByUsername(username: string): Promise<IUser | null> {
-        return await UserModel.findOne({ username });
+    // 3. Get User by Phone (Required by our updated UserService)
+    async getUserByPhoneNumber(phoneNumber: string) {
+        return await User.findOne({ phoneNumber });
+    }
+
+    // 4. Get User by ID
+    async getUserById(id: string) {
+        return await User.findById(id);
     }
 }
