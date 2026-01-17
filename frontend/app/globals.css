@@ -1,37 +1,53 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* --- Brand Colors (Fixed Light Mode) --- */
+  --dm-primary-blue: #29ABE2;
+  --dm-gradient-light: #63C6F7;
+  
+  --dm-text-main: #2D2D2D;
+  --dm-text-secondary: #757575;
+  
+  --dm-bg-main: #FAFAFA;
+  --dm-surface-white: #FFFFFF;
+  
+  --dm-error: #F44336;
+  --dm-border: #EEEEEE;
+
+  /* Tailwind Mappings */
+  --color-primary: var(--dm-primary-blue);
+  --color-background: var(--dm-bg-main);
+  --color-surface: var(--dm-surface-white);
+  --color-text-main: var(--dm-text-main);
+  --color-text-sub: var(--dm-text-secondary);
+  --color-border-subtle: var(--dm-border);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-poppins);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer utilities {
+  .shadow-soft {
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.05);
+  }
+  
+  .shadow-card {
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  /* Rounded Corners */
+  .radius-card { border-radius: 20px; }
+  .radius-btn { border-radius: 15px; }
+  
+  /* Layout Utilities */
+  .container-custom {
+    @apply mx-auto max-w-6xl px-4 sm:px-6 lg:px-8;
   }
 }
 
+/* Reset Body to Light Mode */
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-/* Explicit theme overrides via data attribute */
-[data-theme="light"] {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-[data-theme="dark"] {
-  --background: #0a0a0a;
-  --foreground: #ededed;
+  background-color: var(--dm-bg-main);
+  color: var(--dm-text-main);
 }

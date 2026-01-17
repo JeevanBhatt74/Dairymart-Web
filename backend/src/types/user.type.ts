@@ -1,9 +1,12 @@
-// Define the interface for the User document
-export interface UserType {
-    email: string;
-    password?: string; // Optional because we might exclude it in responses
-    username: string;
-    firstName?: string;
-    lastName?: string;
-    role: 'user' | 'admin';
+import { Document } from "mongoose";
+
+export interface IUser extends Document {
+  fullName: string;
+  email: string;
+  password?: string;
+  phoneNumber: string;
+  locationId: any; // Schema.Types.ObjectId
+  address: string;
+  role: "user" | "admin";
+  createdAt: Date;
 }

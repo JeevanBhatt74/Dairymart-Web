@@ -1,100 +1,142 @@
-// frontend/app/dashboard/page.tsx
+"use client";
+
 import Link from "next/link";
-import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+
+// Define the type for the User state
+interface User {
+  firstName?: string;
+  email?: string;
+  role?: string;
+}
 
 export default function DashboardPage() {
+  const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
+
+  useEffect(() => {
+    // Simulate fetching user from localStorage or API
+    const token = localStorage.getItem("token");
+    if (!token) {
+       router.push("/login"); // Redirect if not logged in
+    }
+  }, [router]);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("userId");
+    localStorage.removeItem("role");
+    router.push("/login");
+  };
+
   return (
-    <div className="min-h-screen bg-background text-foreground font-sans">
-      {/* Dashboard Header */}
-      <header className="sticky top-0 z-30 flex h-16 items-center border-b border-black/5 bg-background/80 px-6 backdrop-blur-md dark:border-white/10">
-        <div className="flex w-full items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 text-white font-bold">
-              M
-            </div>
-            <span className="text-lg font-semibold tracking-tight">MyApp Dashboard</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="hidden text-sm text-foreground/60 sm:block">
-              welcome@example.com
-            </div>
-            <Link
-              href="/"
-              className="rounded-md border border-black/10 px-3 py-1.5 text-sm font-medium hover:bg-black/5 dark:border-white/10 dark:hover:bg-white/10"
-            >
-              Log out
-            </Link>
-          </div>
+    <div className="min-h-screen bg-[var(--dm-bg-main)]">
+      {/* Dashboard Navbar */}
+      <nav className="h-16 bg-white border-b border-[var(--dm-border)] px-6 flex items-center justify-between sticky top-0 z-20">
+        <div className="flex items-center gap-3">
+            <span className="text-2xl">🥛</span>
+            <span className="font-bold text-[var(--dm-primary-blue)] text-lg">My Dashboard</span>
         </div>
-      </header>
+        <button 
+            onClick={handleLogout}
+            className="text-sm font-medium text-red-500 hover:bg-red-50 px-4 py-2 rounded-[12px] transition-colors"
+        >
+            Sign Out
+        </button>
+      </nav>
 
-      {/* Main Content */}
-      <main className="p-6 md:p-10">
-        <div className="mx-auto max-w-6xl space-y-8">
-          
-          {/* Welcome Section */}
-          <div className="flex flex-col gap-2">
-            <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
-            <p className="text-foreground/60">
-              Here is an overview of your account activity.
-            </p>
-          </div>
-
-          {/* Stats Grid */}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {[
-              { label: "Total Revenue", value: "$45,231.89", change: "+20.1%", trend: "up" },
-              { label: "Subscriptions", value: "+2350", change: "+180.1%", trend: "up" },
-              { label: "Sales", value: "+12,234", change: "+19%", trend: "up" },
-              { label: "Active Now", value: "+573", change: "+201", trend: "up" },
-            ].map((stat, i) => (
-              <div
-                key={i}
-                className="rounded-xl border border-black/10 bg-background p-6 shadow-sm transition-all hover:shadow-md dark:border-white/10"
-              >
-                <h3 className="text-sm font-medium text-foreground/60">{stat.label}</h3>
-                <div className="mt-2 flex items-baseline gap-2">
-                  <span className="text-2xl font-bold">{stat.value}</span>
-                  <span className="text-xs font-medium text-emerald-600">
-                    {stat.change} from last month
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Recent Activity / Placeholder Area */}
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-            
-            {/* Main Chart Area Placeholder */}
-            <div className="col-span-4 rounded-xl border border-black/10 bg-background p-6 shadow-sm dark:border-white/10">
-              <h3 className="mb-4 text-lg font-semibold">Overview</h3>
-              <div className="flex h-[300px] items-center justify-center rounded-lg border border-dashed border-black/10 bg-black/5 dark:border-white/10 dark:bg-white/5">
-                <p className="text-sm text-foreground/40">Chart visualization placeholder</p>
-              </div>
+      <div className="container-custom py-8 space-y-8">
+        
+        {/* 1. Welcome Banner */}
+        <div className="relative overflow-hidden radius-card p-8 text-white shadow-lg shadow-blue-500/20"
+             style={{ background: "linear-gradient(135deg, var(--dm-primary-blue), var(--dm-gradient-light))" }}>
+            <div className="relative z-10">
+                <h1 className="text-3xl font-bold mb-2">Welcome Back! 👋</h1>
+                <p className="opacity-90">Manage your orders and account settings.</p>
             </div>
-
-            {/* Recent Sales Placeholder */}
-            <div className="col-span-3 rounded-xl border border-black/10 bg-background p-6 shadow-sm dark:border-white/10">
-              <h3 className="mb-4 text-lg font-semibold">Recent Sales</h3>
-              <div className="space-y-4">
-                {[1, 2, 3, 4, 5].map((_, i) => (
-                  <div key={i} className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                      <div className="h-9 w-9 rounded-full bg-black/10 dark:bg-white/10" />
-                      <div>
-                        <p className="text-sm font-medium">User Name</p>
-                        <p className="text-xs text-foreground/60">user@email.com</p>
-                      </div>
-                    </div>
-                    <div className="text-sm font-medium">+$1,999.00</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+            {/* Decor Circles */}
+            <div className="absolute top-0 right-0 -mr-10 -mt-10 w-40 h-40 bg-white/20 rounded-full blur-2xl"></div>
         </div>
-      </main>
+
+        {/* 2. Stats Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <StatCard icon="🛍️" label="Total Orders" value="12" />
+            <StatCard icon="💖" label="Favorites" value="4" />
+            <StatCard icon="💳" label="Wallet Balance" value="Rs. 450" />
+        </div>
+
+        {/* 3. Recent Orders Section */}
+        <div className="bg-white radius-card p-6 shadow-soft border border-[var(--dm-border)]">
+            <div className="flex items-center justify-between mb-6">
+                <h2 className="text-lg font-bold text-[var(--dm-text-main)]">Recent Orders</h2>
+                <button className="text-sm text-[var(--dm-primary-blue)] font-semibold hover:underline">View All</button>
+            </div>
+
+            {/* Table Header */}
+            <div className="grid grid-cols-4 text-sm font-medium text-[var(--dm-text-secondary)] pb-4 border-b border-[var(--dm-border)]">
+                <span>Order ID</span>
+                <span>Date</span>
+                <span>Status</span>
+                <span className="text-right">Total</span>
+            </div>
+
+            {/* Order Items (Dummy Data) */}
+            <div className="space-y-4 mt-4">
+                <OrderItem id="#DM-8821" date="Jan 1, 2026" status="Delivered" total="Rs. 1,200" statusColor="text-green-600 bg-green-50" />
+                <OrderItem id="#DM-8820" date="Dec 28, 2025" status="Processing" total="Rs. 450" statusColor="text-blue-600 bg-blue-50" />
+                <OrderItem id="#DM-8819" date="Dec 24, 2025" status="Cancelled" total="Rs. 890" statusColor="text-red-600 bg-red-50" />
+            </div>
+        </div>
+
+      </div>
     </div>
   );
+}
+
+// --- Helper Components & Types ---
+
+// 1. StatCard Component
+interface StatCardProps {
+  icon: string;
+  label: string;
+  value: string;
+}
+
+function StatCard({ icon, label, value }: StatCardProps) {
+    return (
+        <div className="bg-white p-6 radius-card shadow-card border border-[var(--dm-border)] flex items-center gap-4 hover:shadow-soft transition-shadow">
+            <div className="h-12 w-12 rounded-[15px] bg-[var(--dm-bg-main)] flex items-center justify-center text-2xl">
+                {icon}
+            </div>
+            <div>
+                <p className="text-sm text-[var(--dm-text-secondary)]">{label}</p>
+                <p className="text-xl font-bold text-[var(--dm-text-main)]">{value}</p>
+            </div>
+        </div>
+    );
+}
+
+// 2. OrderItem Component (Fixed Type Error)
+interface OrderItemProps {
+  id: string;
+  date: string;
+  status: string;
+  total: string;
+  statusColor: string;
+}
+
+function OrderItem({ id, date, status, total, statusColor }: OrderItemProps) {
+    return (
+        <div className="grid grid-cols-4 items-center text-sm py-2">
+            <span className="font-medium text-[var(--dm-text-main)]">{id}</span>
+            <span className="text-[var(--dm-text-secondary)]">{date}</span>
+            <div>
+                <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${statusColor}`}>
+                    {status}
+                </span>
+            </div>
+            <span className="text-right font-bold text-[var(--dm-text-main)]">{total}</span>
+        </div>
+    );
 }
