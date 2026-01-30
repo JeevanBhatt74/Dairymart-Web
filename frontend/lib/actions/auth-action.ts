@@ -4,7 +4,7 @@
 
 import { registerUser } from "../api/auth"; // Import registerUser function
 
-export const handelRegister = async (formData: any) =>{
+export const handleRegister = async (formData: any) =>{
     try {
         const result = await registerUser(formData);
 

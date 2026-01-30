@@ -2,7 +2,7 @@
 
 export const API = {
     AUTH: {
-        REGISTER: "/api/auth/register", // backend ko route path
-        LOGIN: "/api/auth/login"
+        REGISTER: "/api/v1/users/register", // backend ko route path
+        LOGIN: "/api/v1/users/login"
     }
 };
