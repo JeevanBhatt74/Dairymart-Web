@@ -5,12 +5,22 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaUserPlus, FaChevronLeft } from "react-icons/fa";
 
+interface CreateUserFormData {
+    fullName: string;
+    email: string;
+    password: string;
+    phoneNumber: string;
+    address: string;
+    role: "user" | "admin";
+    profilePicture: FileList;
+}
+
 export default function CreateUserPage() {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm<CreateUserFormData>();
     const router = useRouter();
     const [submitting, setSubmitting] = useState(false);
 
-    const onSubmit = async (data: any) => {
+    const onSubmit = async (data: CreateUserFormData) => {
         setSubmitting(true);
         const formData = new FormData();
         formData.append("fullName", data.fullName);
@@ -49,7 +59,7 @@ export default function CreateUserPage() {
         <div className="max-w-4xl mx-auto space-y-6">
             {/* Header */}
             <div className="flex items-center gap-4">
-                <button onClick={() => router.back()} className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-500">
+                <button onClick={() => router.back()} className="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-500" title="Go back">
                     <FaChevronLeft />
                 </button>
                 <div>

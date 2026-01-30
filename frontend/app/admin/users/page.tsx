@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { FaPlus, FaSearch, FaTrash, FaEdit, FaEye } from "react-icons/fa";
 
 interface User {
@@ -12,6 +13,25 @@ interface User {
     phoneNumber: string;
     profilePicture?: string;
 }
+
+const buildProfileImageUrl = (profilePicture?: string): string | null => {
+    if (!profilePicture || !profilePicture.trim()) {
+        return null;
+    }
+    try {
+        // Check if it's already a full URL
+        if (profilePicture.startsWith('http://') || profilePicture.startsWith('https://')) {
+            new URL(profilePicture);
+            return profilePicture;
+        }
+        // Otherwise, prepend the base URL
+        const path = profilePicture.startsWith('/') ? profilePicture : `/${profilePicture}`;
+        new URL(`http://localhost:5000${path}`);
+        return `http://localhost:5000${path}`;
+    } catch {
+        return null;
+    }
+};
 
 export default function AdminUsersPage() {
     const [users, setUsers] = useState<User[]>([]);
@@ -122,8 +142,8 @@ export default function AdminUsersPage() {
                                     <td className="px-6 py-4">
                                         <div className="flex items-center gap-4">
                                             <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-blue-600 font-bold overflow-hidden border-2 border-white shadow-sm ring-1 ring-slate-100">
-                                                {user.profilePicture ? (
-                                                    <img src={`http://localhost:5000${user.profilePicture}`} alt={user.fullName} className="w-full h-full object-cover" />
+                                                {buildProfileImageUrl(user.profilePicture) ? (
+                                                    <Image src={buildProfileImageUrl(user.profilePicture)!} alt={user.fullName} width={40} height={40} className="w-full h-full object-cover" />
                                                 ) : (
                                                     user.fullName.charAt(0)
                                                 )}
@@ -154,7 +174,7 @@ export default function AdminUsersPage() {
                                             <Link href={`/admin/users/${user._id}/edit`} className="p-2 text-slate-400 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors">
                                                 <FaEdit size={16} />
                                             </Link>
-                                            <button onClick={() => handleDelete(user._id)} className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+                                            <button onClick={() => handleDelete(user._id)} className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors" title="Delete user">
                                                 <FaTrash size={15} />
                                             </button>
                                         </div>
@@ -164,7 +184,7 @@ export default function AdminUsersPage() {
                             {filteredUsers.length === 0 && (
                                 <tr>
                                     <td colSpan={4} className="px-6 py-12 text-center text-slate-400">
-                                        No users found matching "{searchTerm}"
+                                        No users found matching &quot;{searchTerm}&quot;
                                     </td>
                                 </tr>
                             )}

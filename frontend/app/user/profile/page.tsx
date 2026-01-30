@@ -94,8 +94,8 @@ export default function UserProfilePage() {
         <AuthGuard>
             <div className="min-h-screen bg-slate-50 pb-20">
                 {/* Header Banner */}
-                <div className="bg-[var(--dm-primary-blue)] h-60 relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-cyan-500 opacity-90" />
+                <div className="bg-(--dm-primary-blue) h-60 relative overflow-hidden">
+                    <div className="absolute inset-0 bg-linear-to-r from-blue-600 to-cyan-500 opacity-90" />
                     <div className="absolute top-0 left-0 w-full h-full opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pointer-events-none" />
 
                     <div className="container-custom mx-auto px-4 pt-10 relative z-10 flex justify-between items-start">
@@ -111,7 +111,7 @@ export default function UserProfilePage() {
                         {/* Sidebar / Profile Card */}
                         <div className="lg:col-span-1 space-y-6">
                             <div className="bg-white rounded-3xl p-8 shadow-xl shadow-blue-900/5 text-center border border-slate-100 relative overflow-hidden">
-                                <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-blue-500 to-cyan-400" />
+                                <div className="absolute top-0 left-0 w-full h-2 bg-linear-to-r from-blue-500 to-cyan-400" />
 
                                 <div className="w-32 h-32 mx-auto rounded-full bg-slate-100 flex items-center justify-center overflow-hidden border-4 border-white shadow-lg mb-6 ring-4 ring-blue-50">
                                     {profilePic ? (
