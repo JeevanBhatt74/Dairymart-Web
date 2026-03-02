@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import AuthGuard from "@/app/_components/AuthGuard";
-import { FaSave, FaUserCircle, FaSignOutAlt, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from "react-icons/fa";
+import { FaSave, FaUserCircle, FaSignOutAlt, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope, FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function UserProfilePage() {
     const { register, handleSubmit, setValue } = useForm();
@@ -12,6 +12,12 @@ export default function UserProfilePage() {
     const [submitting, setSubmitting] = useState(false);
     const [loading, setLoading] = useState(true);
     const [profilePic, setProfilePic] = useState<string | null>(null);
+    const [showPassword, setShowPassword] = useState(false);
+
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+    const BASE_URL = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:5000";
+
+    const [loyalty, setLoyalty] = useState<any>(null);
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -21,7 +27,8 @@ export default function UserProfilePage() {
             if (!userId) return;
 
             try {
-                const res = await fetch(`http://localhost:5000/api/v1/users/${userId}`, {
+                // Fetch User Profile
+                const res = await fetch(`${API_URL}/v1/users/${userId}`, {
                     headers: { "Authorization": `Bearer ${token}` }
                 });
                 const data = await res.json();
@@ -33,6 +40,16 @@ export default function UserProfilePage() {
                     setValue("address", u.address);
                     setProfilePic(u.profilePicture);
                 }
+
+                // Fetch Loyalty Points
+                const loyaltyRes = await fetch(`${API_URL.replace('/v1', '')}/loyalty/points`, {
+                    headers: { "Authorization": `Bearer ${token}` }
+                });
+                const loyaltyData = await loyaltyRes.json();
+                console.log("Loyalty Data Fetch:", loyaltyData);
+                if (loyaltyData.success) {
+                    setLoyalty(loyaltyData.data);
+                }
             } catch (error) {
                 console.error("Fetch error", error);
             } finally {
@@ -40,7 +57,7 @@ export default function UserProfilePage() {
             }
         };
         fetchUser();
-    }, [setValue]);
+    }, [setValue, API_URL]);
 
     const onSubmit = async (data: any) => {
         setSubmitting(true);
@@ -60,7 +77,7 @@ export default function UserProfilePage() {
         }
 
         try {
-            const res = await fetch(`http://localhost:5000/api/v1/users/${userId}`, {
+            const res = await fetch(`${API_URL}/v1/users/${userId}`, {
                 method: "PUT",
                 headers: { "Authorization": `Bearer ${token}` },
                 body: formData
@@ -115,7 +132,7 @@ export default function UserProfilePage() {
 
                                 <div className="w-32 h-32 mx-auto rounded-full bg-slate-100 flex items-center justify-center overflow-hidden border-4 border-white shadow-lg mb-6 ring-4 ring-blue-50">
                                     {profilePic ? (
-                                        <img src={`http://localhost:5000${profilePic}`} alt="Profile" className="w-full h-full object-cover" />
+                                        <img src={profilePic.startsWith('http') ? profilePic : `${BASE_URL}${profilePic}`} alt="Profile" className="w-full h-full object-cover" />
                                     ) : (
                                         <FaUserCircle className="text-6xl text-slate-300" />
                                     )}
@@ -134,6 +151,47 @@ export default function UserProfilePage() {
                                         <span className="text-sm opacity-80">Support: 9812345678</span>
                                     </div>
                                 </div>
+
+                                {/* Loyalty Points Section */}
+                                {loyalty && (
+                                    <div className="mt-8 p-6 rounded-2xl border text-left bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-100">
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className="flex items-center gap-2">
+                                                <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white shadow-lg">⭐</div>
+                                                <span className="font-bold text-slate-800 text-sm">Loyalty Points</span>
+                                            </div>
+                                            <span className="text-blue-700 font-bold text-sm">{loyalty.loyaltyPoints} pts</span>
+                                        </div>
+
+                                        {!loyalty.discountAvailable ? (
+                                            <div className="space-y-2">
+                                                <div className="flex justify-between text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                                    <span>Progress to 20% Off</span>
+                                                    <span>{loyalty.loyaltyPoints}%</span>
+                                                </div>
+                                                <div className="w-full h-2 bg-white rounded-full overflow-hidden border border-blue-100 shadow-inner">
+                                                    <div
+                                                        className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all duration-500"
+                                                        style={{ width: `${Math.min(100, (loyalty.loyaltyPoints / 100) * 100)}%` }}
+                                                    />
+                                                </div>
+                                                <p className="text-[10px] text-slate-500 italic text-center">
+                                                    {loyalty.pointsToNextDiscount} more points for 20% discount
+                                                </p>
+                                            </div>
+                                        ) : (
+                                            <div className="bg-emerald-500 text-white p-3 rounded-xl shadow-lg shadow-emerald-500/20 text-center">
+                                                <p className="font-bold text-xs">🎉 20% DISCOUNT READY!</p>
+                                                <p className="text-[10px] opacity-90">Apply at checkout on orders &gt; Rs. 1000</p>
+                                            </div>
+                                        )}
+
+                                        <div className="mt-4 pt-4 border-t border-blue-100 grid grid-cols-2 gap-2 text-[9px] font-bold text-blue-600 text-center uppercase tracking-tighter">
+                                            <div className="bg-white rounded-lg py-1 border border-blue-50 shadow-sm">🛒 +20 PTS</div>
+                                            <div className="bg-white rounded-lg py-1 border border-blue-50 shadow-sm">🔥 +100 BONUS</div>
+                                        </div>
+                                    </div>
+                                )}
 
                                 <button onClick={handleLogout} className="mt-8 w-full py-3 rounded-xl border border-red-100 text-red-600 font-semibold hover:bg-red-50 transition-colors flex items-center justify-center gap-2">
                                     <FaSignOutAlt /> Sign Out
@@ -182,7 +240,21 @@ export default function UserProfilePage() {
 
                                     <div className="md:col-span-2 pt-4 border-t border-slate-100">
                                         <label className="block text-sm font-bold text-slate-700 mb-2">Security</label>
-                                        <input type="password" {...register("password")} className="w-full bg-slate-50 border-transparent rounded-xl p-3.5 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" placeholder="Enter new password to change" />
+                                        <div className="relative">
+                                            <input
+                                                type={showPassword ? "text" : "password"}
+                                                {...register("password")}
+                                                className="w-full bg-slate-50 border-transparent rounded-xl p-3.5 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none pr-10"
+                                                placeholder="Enter new password to change"
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={() => setShowPassword(!showPassword)}
+                                                className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors"
+                                            >
+                                                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                            </button>
+                                        </div>
                                     </div>
 
                                     <div className="md:col-span-2">

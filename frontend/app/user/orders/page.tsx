@@ -23,13 +23,16 @@ export default function UserOrdersPage() {
     const [orders, setOrders] = useState<Order[]>([]);
     const [loading, setLoading] = useState(true);
 
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+    const BASE_URL = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:5000";
+
     useEffect(() => {
         const fetchOrders = async () => {
             const token = localStorage.getItem("token");
             if (!token) return;
 
             try {
-                const res = await fetch("http://localhost:5000/api/orders/my-orders", {
+                const res = await fetch(`${API_URL}/orders/my-orders`, {
                     headers: { "Authorization": `Bearer ${token}` }
                 });
                 const data = await res.json();
@@ -106,7 +109,7 @@ export default function UserOrdersPage() {
                                         <div key={idx} className="flex gap-4 items-center">
                                             <div className="w-16 h-16 bg-slate-50 rounded-xl flex items-center justify-center border border-slate-100 overflow-hidden">
                                                 {item.product?.image ? (
-                                                    <img src={`http://localhost:5000${item.product.image}`} alt={item.product?.name} className="w-full h-full object-cover" />
+                                                    <img src={item.product.image.startsWith('http') ? item.product.image : `${BASE_URL}${item.product.image}`} alt={item.product?.name} className="w-full h-full object-cover" />
                                                 ) : (
                                                     <FaBoxOpen className="text-slate-300" />
                                                 )}
