@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import AIChatbot from "./_components/AIChatbot";
+import { Suspense } from "react";
 
 // 1. Configure the Poppins font
 const poppins = Poppins({
@@ -28,7 +29,7 @@ export default function RootLayout({
         className={`${poppins.variable} font-sans antialiased bg-[--dm-bg-light] text-[--dm-text-main]`}
       >
         <Providers>
-          {children}
+          <Suspense>{children}</Suspense>
           <AIChatbot />
         </Providers>
       </body>
