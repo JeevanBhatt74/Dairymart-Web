@@ -3,19 +3,22 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useParams, useRouter } from "next/navigation";
-import { FaSave, FaChevronLeft } from "react-icons/fa";
+import { FaSave, FaChevronLeft, FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function EditUserPage() {
     const params = useParams();
     const router = useRouter();
     const { register, handleSubmit, setValue } = useForm();
     const [submitting, setSubmitting] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
     useEffect(() => {
         const fetchUser = async () => {
             const token = localStorage.getItem("token");
             try {
-                const res = await fetch(`http://localhost:5000/api/admin/users/${params.id}`, {
+                const res = await fetch(`${API_URL}/admin/users/${params.id}`, {
                     headers: { "Authorization": `Bearer ${token}` }
                 });
                 const data = await res.json();
@@ -52,7 +55,7 @@ export default function EditUserPage() {
 
         const token = localStorage.getItem("token");
         try {
-            const res = await fetch(`http://localhost:5000/api/admin/users/${params.id}`, {
+            const res = await fetch(`${API_URL}/admin/users/${params.id}`, {
                 method: "PUT",
                 headers: { "Authorization": `Bearer ${token}` },
                 body: formData
@@ -101,7 +104,21 @@ export default function EditUserPage() {
 
                             <div>
                                 <label className="block text-sm font-medium text-slate-700 mb-1">New Password (Optional)</label>
-                                <input type="password" {...register("password")} className="w-full bg-slate-50 border-transparent rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" placeholder="Leave blank to keep current" />
+                                <div className="relative">
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        {...register("password")}
+                                        className="w-full bg-slate-50 border-transparent rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none pr-10"
+                                        placeholder="Leave blank to keep current"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors"
+                                    >
+                                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -23,9 +23,10 @@ export default function CreateProductPage() {
             formData.append("image", data.image[0]);
         }
 
+        const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
         const token = localStorage.getItem("token");
         try {
-            const res = await fetch("http://localhost:5000/api/products", {
+            const res = await fetch(`${API_URL}/products`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${token}`

@@ -9,11 +9,14 @@ export default function ViewUserPage() {
     const [user, setUser] = useState<any>(null);
     const [loading, setLoading] = useState(true);
 
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+    const BASE_URL = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:5000";
+
     useEffect(() => {
         const fetchUser = async () => {
             const token = localStorage.getItem("token");
             try {
-                const res = await fetch(`http://localhost:5000/api/admin/users/${params.id}`, {
+                const res = await fetch(`${API_URL}/admin/users/${params.id}`, {
                     headers: { "Authorization": `Bearer ${token}` }
                 });
                 const data = await res.json();
@@ -37,7 +40,7 @@ export default function ViewUserPage() {
             <div className="bg-white p-8 rounded-xl shadow-sm border border-gray-200 flex gap-8">
                 <div className="w-32 h-32 rounded-full bg-blue-50 flex items-center justify-center overflow-hidden border-4 border-white shadow-sm flex-shrink-0">
                     {user.profilePicture ? (
-                        <img src={`http://localhost:5000${user.profilePicture}`} alt={user.fullName} className="w-full h-full object-cover" />
+                        <img src={user.profilePicture.startsWith('http') ? user.profilePicture : `${BASE_URL}${user.profilePicture}`} alt={user.fullName} className="w-full h-full object-cover" />
                     ) : (
                         <span className="text-4xl">👤</span>
                     )}

@@ -3,7 +3,7 @@
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { FaUserPlus, FaChevronLeft } from "react-icons/fa";
+import { FaUserPlus, FaChevronLeft, FaEye, FaEyeSlash } from "react-icons/fa";
 
 interface CreateUserFormData {
     fullName: string;
@@ -19,6 +19,7 @@ export default function CreateUserPage() {
     const { register, handleSubmit, formState: { errors } } = useForm<CreateUserFormData>();
     const router = useRouter();
     const [submitting, setSubmitting] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const onSubmit = async (data: CreateUserFormData) => {
         setSubmitting(true);
@@ -33,9 +34,10 @@ export default function CreateUserPage() {
             formData.append("profilePicture", data.profilePicture[0]);
         }
 
+        const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
         const token = localStorage.getItem("token");
         try {
-            const res = await fetch("http://localhost:5000/api/admin/users", {
+            const res = await fetch(`${API_URL}/admin/users`, {
                 method: "POST",
                 headers: {
                     "Authorization": `Bearer ${token}`
@@ -87,7 +89,21 @@ export default function CreateUserPage() {
                             </div>
                             <div>
                                 <label className="block text-sm font-medium text-slate-700 mb-1">Password</label>
-                                <input type="password" {...register("password", { required: true })} className="w-full bg-slate-50 border-transparent rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none" placeholder="••••••••" />
+                                <div className="relative">
+                                    <input
+                                        type={showPassword ? "text" : "password"}
+                                        {...register("password", { required: true })}
+                                        className="w-full bg-slate-50 border-transparent rounded-xl p-3 focus:bg-white focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all outline-none pr-10"
+                                        placeholder="••••••••"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-blue-600 transition-colors"
+                                    >
+                                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                    </button>
+                                </div>
                                 {errors.password && <span className="text-red-500 text-xs mt-1 block">Password is required</span>}
                             </div>
                         </div>

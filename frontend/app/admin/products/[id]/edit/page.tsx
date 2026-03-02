@@ -11,10 +11,12 @@ export default function EditProductPage() {
     const { register, handleSubmit, setValue } = useForm();
     const [submitting, setSubmitting] = useState(false);
 
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+
     useEffect(() => {
         const fetchProduct = async () => {
             try {
-                const res = await fetch(`http://localhost:5000/api/products/${params.id}`);
+                const res = await fetch(`${API_URL}/products/${params.id}`);
                 const data = await res.json();
                 if (data.success) {
                     const p = data.data;
@@ -46,7 +48,7 @@ export default function EditProductPage() {
 
         const token = localStorage.getItem("token");
         try {
-            const res = await fetch(`http://localhost:5000/api/products/${params.id}`, {
+            const res = await fetch(`${API_URL}/products/${params.id}`, {
                 method: "PUT",
                 headers: { "Authorization": `Bearer ${token}` },
                 body: formData

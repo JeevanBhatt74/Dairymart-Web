@@ -18,11 +18,14 @@ export default function AdminProductsPage() {
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState("");
 
+    const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+    const BASE_URL = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:5000";
+
     useEffect(() => {
         const fetchProducts = async () => {
             // Public GET endpoint
             try {
-                const res = await fetch("http://localhost:5000/api/products");
+                const res = await fetch(`${API_URL}/products`);
                 const data = await res.json();
                 if (data.success) {
                     setProducts(data.data);
@@ -42,7 +45,7 @@ export default function AdminProductsPage() {
 
         const token = localStorage.getItem("token");
         try {
-            const res = await fetch(`http://localhost:5000/api/products/${id}`, {
+            const res = await fetch(`${API_URL}/products/${id}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${token}`
@@ -120,7 +123,7 @@ export default function AdminProductsPage() {
                                         <div className="flex items-center gap-4">
                                             <div className="w-12 h-12 rounded-lg bg-orange-50 flex items-center justify-center text-orange-500 font-bold overflow-hidden border border-slate-100">
                                                 {product.image ? (
-                                                    <img src={`http://localhost:5000${product.image}`} alt={product.name} className="w-full h-full object-cover" />
+                                                    <img src={product.image.startsWith('http') ? product.image : `${BASE_URL}${product.image}`} alt={product.name} className="w-full h-full object-cover" />
                                                 ) : (
                                                     <FaBoxOpen className="text-xl" />
                                                 )}
