@@ -7,10 +7,14 @@ import { RegisterData, registerSchema } from "../schema";
 import { useRouter } from "next/navigation";
 import { registerUser } from "@/lib/api/auth";
 import { useToast } from "@/app/_context/ToastContext";
+import { useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function RegisterForm() {
     const router = useRouter();
     const toast = useToast();
+    const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<RegisterData>({
         resolver: zodResolver(registerSchema),
     });
@@ -121,25 +125,43 @@ export default function RegisterForm() {
 
                 <div className="space-y-2">
                     <label className="text-sm font-semibold text-[var(--dm-text-secondary)] ml-1">Password</label>
-                    <input
-                        type="password"
-                        className={`w-full h-14 px-4 bg-[var(--dm-bg-light)] border rounded-[15px] outline-none transition-all text-[var(--dm-text-main)] ${errors.password ? 'border-red-500 focus:ring-red-500/10' : 'border-[var(--dm-border)] focus:border-[var(--dm-primary-blue)] focus:ring-blue-500/10'
-                            } focus:ring-4`}
-                        {...register("password")}
-                        placeholder="••••••"
-                    />
+                    <div className="relative">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            className={`w-full h-14 pl-4 pr-12 bg-[var(--dm-bg-light)] border rounded-[15px] outline-none transition-all text-[var(--dm-text-main)] ${errors.password ? 'border-red-500 focus:ring-red-500/10' : 'border-[var(--dm-border)] focus:border-[var(--dm-primary-blue)] focus:ring-blue-500/10'
+                                } focus:ring-4`}
+                            {...register("password")}
+                            placeholder="••••••"
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-4 top-4 text-[var(--dm-text-secondary)] hover:text-[var(--dm-primary-blue)] transition-colors focus:outline-none"
+                        >
+                            {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                        </button>
+                    </div>
                     {errors.password?.message && <p className="text-xs text-red-500 ml-1 flex items-center gap-1"><span>⚠</span> {errors.password.message}</p>}
                 </div>
 
                 <div className="space-y-2">
                     <label className="text-sm font-semibold text-[var(--dm-text-secondary)] ml-1">Confirm</label>
-                    <input
-                        type="password"
-                        className={`w-full h-14 px-4 bg-[var(--dm-bg-light)] border rounded-[15px] outline-none transition-all text-[var(--dm-text-main)] ${errors.confirmPassword ? 'border-red-500 focus:ring-red-500/10' : 'border-[var(--dm-border)] focus:border-[var(--dm-primary-blue)] focus:ring-blue-500/10'
-                            } focus:ring-4`}
-                        {...register("confirmPassword")}
-                        placeholder="••••••"
-                    />
+                    <div className="relative">
+                        <input
+                            type={showConfirmPassword ? "text" : "password"}
+                            className={`w-full h-14 pl-4 pr-12 bg-[var(--dm-bg-light)] border rounded-[15px] outline-none transition-all text-[var(--dm-text-main)] ${errors.confirmPassword ? 'border-red-500 focus:ring-red-500/10' : 'border-[var(--dm-border)] focus:border-[var(--dm-primary-blue)] focus:ring-blue-500/10'
+                                } focus:ring-4`}
+                            {...register("confirmPassword")}
+                            placeholder="••••••"
+                        />
+                        <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            className="absolute right-4 top-4 text-[var(--dm-text-secondary)] hover:text-[var(--dm-primary-blue)] transition-colors focus:outline-none"
+                        >
+                            {showConfirmPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                        </button>
+                    </div>
                     {errors.confirmPassword?.message && <p className="text-xs text-red-500 ml-1 flex items-center gap-1"><span>⚠</span> {errors.confirmPassword.message}</p>}
                 </div>
             </div>
