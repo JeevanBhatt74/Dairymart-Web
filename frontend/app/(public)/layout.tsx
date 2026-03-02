@@ -1,15 +1,17 @@
 import Header from "./_components/Header";
+import Footer from "./_components/Footer";
 import RedirectIfAdmin from "../_components/RedirectIfAdmin";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     return (
         <RedirectIfAdmin>
-            <section>
+            <div className="flex flex-col min-h-screen">
                 <Header />
-                <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+                <main className="flex-1 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8 pt-24">
                     {children}
                 </main>
-            </section>
+                <Footer />
+            </div>
         </RedirectIfAdmin>
     );
 }
