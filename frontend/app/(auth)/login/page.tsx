@@ -1,19 +1,24 @@
+import dynamic from "next/dynamic";
 import LoginFormNew from "../_components/LoginFormNew";
-import LottieAnimation from "@/app/_components/LottieAnimation";
 import loginAnimation from "@/assests/Login.json";
 
+const LottieAnimation = dynamic(() => import("@/app/_components/LottieAnimation"), {
+  loading: () => <div className="w-full h-full bg-linear-to-br from-blue-50 to-cyan-50" />,
+});
+
 import Link from "next/link";
+import Image from "next/image";
 
 export default function LoginPage() {
   return (
     <div className="flex h-screen w-full bg-white overflow-hidden relative">
       {/* Back Button */}
-      <Link href="/" className="absolute top-6 left-6 z-50 flex items-center gap-2 text-sm font-medium text-[var(--dm-text-secondary)] hover:text-[var(--dm-primary-blue)] transition-colors">
+      <Link href="/" className="absolute top-6 left-6 z-50 flex items-center gap-2 text-sm font-medium text-[--dm-text-secondary] hover:text-[--dm-primary-blue] transition-colors">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6" /></svg>
         Back to Home
       </Link>
       {/* Left Side - Animation Display */}
-      <div className="hidden lg:flex w-1/2 bg-[var(--dm-bg-main)] items-center justify-center relative p-10">
+      <div className="hidden lg:flex w-1/2 bg-[--dm-bg-main] items-center justify-center relative p-10">
         <div className="w-full max-w-lg">
           <LottieAnimation animationData={loginAnimation} />
         </div>
@@ -27,21 +32,20 @@ export default function LoginPage() {
         <div className="w-full max-w-xl flex flex-col justify-center min-h-[600px]">
           {/* Brand Logo - Moved from Layout */}
           <div className="mb-10 text-center">
-            <div className="h-16 w-16 bg-blue-50 rounded-2xl mx-auto flex items-center justify-center text-4xl mb-3 shadow-sm">
-              🥛
+            <div className="mx-auto mb-4 flex justify-center">
+              <Image src="/logo.png" alt="DairyMart Logo" width={125} height={125} className="object-contain" />
             </div>
-            <h1 className="text-3xl font-bold text-[var(--dm-primary-blue)] tracking-tight">DairyMart</h1>
           </div>
 
           <LoginFormNew />
 
           {/* Footer Links - Moved from Layout */}
-          <div className="mt-12 text-center text-xs text-[var(--dm-text-secondary)]">
-            <a href="/" className="hover:text-[var(--dm-primary-blue)] transition-colors">Back to Home</a>
+          <div className="mt-12 text-center text-xs text-[--dm-text-secondary]">
+            <a href="/" className="hover:text-[--dm-primary-blue] transition-colors">Back to Home</a>
             <span className="mx-2">•</span>
-            <a href="#" className="hover:text-[var(--dm-primary-blue)] transition-colors">Privacy Policy</a>
+            <a href="#" className="hover:text-[--dm-primary-blue] transition-colors">Privacy Policy</a>
             <span className="mx-2">•</span>
-            <a href="#" className="hover:text-[var(--dm-primary-blue)] transition-colors">Terms</a>
+            <a href="#" className="hover:text-[--dm-primary-blue] transition-colors">Terms</a>
           </div>
         </div>
       </div>

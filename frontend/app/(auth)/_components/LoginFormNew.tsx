@@ -7,11 +7,13 @@ import { LoginData, loginSchema } from "../schema";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { loginUser } from "@/lib/api/auth";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 export default function LoginFormNew() {
     const router = useRouter();
     const [error, setError] = useState<string>("");
     const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm<LoginData>({
         resolver: zodResolver(loginSchema),
     });
@@ -81,8 +83,8 @@ export default function LoginFormNew() {
                     <label className="text-sm font-semibold text-[var(--dm-text-secondary)] ml-1">Password</label>
                     <div className="relative">
                         <input
-                            type="password"
-                            className={`w-full h-14 pl-11 pr-4 bg-[var(--dm-bg-light)] border rounded-[15px] outline-none transition-all text-[var(--dm-text-main)] ${errors.password ? 'border-red-500 focus:ring-red-500/10' : 'border-[var(--dm-border)] focus:border-[var(--dm-primary-blue)] focus:ring-blue-500/10'
+                            type={showPassword ? "text" : "password"}
+                            className={`w-full h-14 pl-11 pr-12 bg-[var(--dm-bg-light)] border rounded-[15px] outline-none transition-all text-[var(--dm-text-main)] ${errors.password ? 'border-red-500 focus:ring-red-500/10' : 'border-[var(--dm-border)] focus:border-[var(--dm-primary-blue)] focus:ring-blue-500/10'
                                 } focus:ring-4`}
                             {...register("password")}
                             placeholder="••••••"
@@ -90,10 +92,17 @@ export default function LoginFormNew() {
                         <div className="absolute left-4 top-3.5 text-[var(--dm-text-secondary)]">
                             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="3" height="8" x="1" y="2" /><path d="M4 18c0 .268.132.52.36.678.228.158.552.232.848.232h7.584c.296 0 .62-.074.848-.232.228-.159.36-.41.36-.678V5.344" /><path d="M4 18c0 .268.132.52.36.678.228.158.552.232.848.232h7.584c.296 0 .62-.074.848-.232.228-.159.36-.41.36-.678V5.344" /></svg>
                         </div>
+                        <button
+                            type="button"
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute right-4 top-4 text-[var(--dm-text-secondary)] hover:text-[var(--dm-primary-blue)] transition-colors focus:outline-none"
+                        >
+                            {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+                        </button>
                     </div>
                     {errors.password?.message && <p className="text-xs text-red-500 ml-1 flex items-center gap-1"><span>⚠</span> {errors.password.message}</p>}
                     <div className="text-right">
-                        <Link href="#" className="text-xs font-bold text-[var(--dm-primary-blue)] hover:underline">Forgot Password?</Link>
+                        <Link href="/forgot-password" className="text-xs font-bold text-[var(--dm-primary-blue)] hover:underline">Forgot Password?</Link>
                     </div>
                 </div>
 
