@@ -176,12 +176,7 @@ export default function Page() {
                         >
                             Shop Now
                         </Link>
-                        <Link
-                            href="/contact"
-                            className="bg-blue-500 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-400 transition inline-block"
-                        >
-                            Contact Us
-                        </Link>
+                     
                     </div>
                 </div>
             </section>
