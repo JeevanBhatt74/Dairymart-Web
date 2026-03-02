@@ -10,7 +10,7 @@ interface ChatMessage {
     timestamp: Date;
 }
 
-const GROQ_API_KEY = process.env.NEXT_PUBLIC_GROQ_API_KEY || "";
+const GROQ_API_KEY = "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";
 const SYSTEM_PROMPT = `You are DairyMart AI, a friendly and knowledgeable assistant for DairyMart — a premium online dairy products store.
 
 Your role:
