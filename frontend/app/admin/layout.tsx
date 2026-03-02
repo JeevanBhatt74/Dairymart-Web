@@ -3,17 +3,18 @@
 import AuthGuard from "@/app/_components/AuthGuard";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { FaUsers, FaBoxOpen, FaSignOutAlt, FaChartLine, FaClipboardList } from "react-icons/fa";
+import { ChartLineIcon, UsersIcon, BoxOpenIcon, ClipboardListIcon, SignOutAltIcon, ChatIcon } from "./_components/AdminIcons";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
     const pathname = usePathname();
     const router = useRouter();
 
     const menuItems = [
-        { name: "Dashboard", href: "/admin", icon: <FaChartLine /> },
-        { name: "User Management", href: "/admin/users", icon: <FaUsers /> },
-        { name: "Products", href: "/admin/products", icon: <FaBoxOpen /> },
-        { name: "Orders", href: "/admin/orders", icon: <FaClipboardList /> },
+        { name: "Dashboard", href: "/admin", icon: <ChartLineIcon /> },
+        { name: "User Management", href: "/admin/users", icon: <UsersIcon /> },
+        { name: "Products", href: "/admin/products", icon: <BoxOpenIcon /> },
+        { name: "Orders", href: "/admin/orders", icon: <ClipboardListIcon /> },
+        { name: "Chat", href: "/admin/chat", icon: <ChatIcon /> },
     ];
 
     const handleLogout = () => {
@@ -59,7 +60,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
                     <div className="p-6 border-t border-slate-100 space-y-2">
 
                         <button onClick={handleLogout} className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-500 hover:bg-red-50 transition-colors text-sm font-medium">
-                            <FaSignOutAlt /> Sign Out
+                            <SignOutAltIcon /> Sign Out
                         </button>
                     </div>
                 </aside>

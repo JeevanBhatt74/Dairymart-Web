@@ -6,7 +6,7 @@ export default function AdminDashboard() {
     // Dummy Data for Dashboard
     const stats = [
         { title: "Total Users", value: "1,240", change: "+12%", icon: <FaUsers />, color: "bg-blue-500" },
-        { title: "Total Sales", value: "$45,290", change: "+8%", icon: <FaDollarSign />, color: "bg-emerald-500" },
+        { title: "Total Sales", value: "Rs. 45,290", change: "+8%", icon: <FaDollarSign />, color: "bg-emerald-500" },
         { title: "Orders", value: "450", change: "+23%", icon: <FaShoppingCart />, color: "bg-purple-500" },
         { title: "Products", value: "85", change: "+5", icon: <FaBoxOpen />, color: "bg-amber-500" },
     ];
@@ -51,7 +51,7 @@ export default function AdminDashboard() {
                                         <div className="text-xs text-slate-500">2 mins ago</div>
                                     </div>
                                 </div>
-                                <span className="font-bold text-slate-700">$120.00</span>
+                                <span className="font-bold text-slate-700">Rs. 120.00</span>
                             </div>
                         ))}
                     </div>
