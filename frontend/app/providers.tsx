@@ -4,6 +4,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactNode } from 'react'
 import { CartProvider } from './_context/CartContext'
 import { ToastProvider } from './_context/ToastContext'
+import { NotificationProvider } from './_context/NotificationContext'
+import StyledJsxRegistry from './registry'
 
 let clientQueryClient: QueryClient | undefined = undefined
 
@@ -30,12 +32,16 @@ export function Providers({ children }: { children: ReactNode }) {
   const queryClient = getQueryClient()
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <ToastProvider>
-        <CartProvider>
-          {children}
-        </CartProvider>
-      </ToastProvider>
-    </QueryClientProvider>
+    <StyledJsxRegistry>
+      <QueryClientProvider client={queryClient}>
+        <ToastProvider>
+          <NotificationProvider>
+            <CartProvider>
+              {children}
+            </CartProvider>
+          </NotificationProvider>
+        </ToastProvider>
+      </QueryClientProvider>
+    </StyledJsxRegistry>
   )
 }

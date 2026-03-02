@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
+import AIChatbot from "./_components/AIChatbot";
 
 // 1. Configure the Poppins font
 const poppins = Poppins({
@@ -24,9 +25,12 @@ export default function RootLayout({
     <html lang="en">
       {/* 2. Apply the font variable and your theme colors to the body */}
       <body
-        className={`${poppins.variable} font-sans antialiased bg-[var(--dm-bg-light)] text-[var(--dm-text-main)]`}
+        className={`${poppins.variable} font-sans antialiased bg-[--dm-bg-light] text-[--dm-text-main]`}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <AIChatbot />
+        </Providers>
       </body>
     </html>
   );
